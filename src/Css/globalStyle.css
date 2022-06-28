@@ -1,3 +1,17 @@
 * {
     box-sizing: border-box;
 }
+
+body {
+    background-color: #8C11BE;
+    color: white;
+}
+
+body * {
+    font-family: 'Raleway', sans-serif;
+}
+
+h1 {
+    font-size: 36px;
+    font-family: 'Saira Stencil One', cursive;
+}
