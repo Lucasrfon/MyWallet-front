@@ -1,11 +1,10 @@
-
-import './Css/reset.css';
-import './Css/globalStyle.css';
-import Login from './Routes/Login';
-import SignUp from './Routes/SignUp';
-import Home from './Routes/Home';
-import Register from './Routes/Register';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './Components/reset.css';
+import './Components/globalStyle.css';
+import Login from './Pages/Login';
+import SignUp from './Pages/SignUp';
+import Home from './Pages/Home';
+import Register from './Pages/Register';
 
 export default function App() {
   return (
