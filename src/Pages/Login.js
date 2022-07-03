@@ -1,14 +1,31 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import TokenContext from "../Contexts/TokenContext";
 
 export default function Login() {
+    const navigate = useNavigate();
+    const [user, setUser] = useState({email: "", password: ""});
+    const { setToken } = useContext(TokenContext);
+
+    function sendLogin(event) {
+        event.preventDefault();
+        axios.post('http://localhost:5000/login', user).then(login).catch((error) => alert(error.response.data));
+    }
+
+    function login(resp) {
+        setToken({headers: {Authorization: `Bearer ${resp.data.token}`}});
+        navigate("/Home");
+    }
+
     return (
         <Container>
             <h1>MyWallet</h1>
-            <form>
-                <input placeholder="E-mail" />
-                <input placeholder="Senha" />
-                <button>Entrar</button>
+            <form onSubmit={sendLogin}>
+                <input required placeholder="E-mail" type="email" value={user.email} onChange={e => setUser({...user, email: e.target.value})} />
+                <input required placeholder="Senha" type="password" value={user.password} onChange={e => setUser({...user, password: e.target.value})} />
+                <button typeof="submit">Entrar</button>
             </form>
             <Link to="/signUp" style={{ textDecoration: 'none' }}>
                 <p>Primeira vez? Cadastre-se!</p>
