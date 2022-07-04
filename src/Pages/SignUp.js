@@ -25,7 +25,7 @@ export default function SignUp() {
         <Container>
             <h1>MyWallet</h1>
             <form onSubmit={checkPassword}>
-                <input required placeholder="Nome" type="text" value={register.name} onChange={e => setRegister({...register, name: e.target.value.replace(" ", "")})} />
+                <input required placeholder="Nome" type="text" value={register.name} onChange={e => setRegister({...register, name: e.target.value.replace(" ", "").replace(/[0-9]/g, "")})} />
                 <input required placeholder="E-mail" type="email" value={register.email} onChange={e => setRegister({...register, email: e.target.value})} />
                 <input required placeholder="Senha" type="password" value={register.password} onChange={e => setRegister({...register, password: e.target.value})} />
                 <input required placeholder="Confirme a senha" type="password" value={register.confirmPassword} onChange={e => setRegister({...register, confirmPassword: e.target.value})} />

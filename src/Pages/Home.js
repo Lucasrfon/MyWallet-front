@@ -11,7 +11,9 @@ export default function Home() {
     const {setType} = useContext(TypeContext);
     const [user, setUser] = useState("");
     const [registers, setRegisters] = useState([]);
-    let [total, setTotal] = useState(0);
+    let sumPositive = 0;
+    let sumNegative = 0;
+    const [total, setTotal] = useState(0)
     const incomeColor = "#03AC00";
     const outcomeColor = "#C70000";
 
@@ -22,12 +24,16 @@ export default function Home() {
     function getValues(resp) {
         setRegisters(resp.data.registers);
         setUser(resp.data.user);
-        console.log(resp.data.registers.length);
+
         for(let i = 0; i < resp.data.registers.length; i ++) {
-            console.log(i);
-            setTotal(total + 1);
+            if(resp.data.registers[i].type === 'entrada') {
+                sumPositive = parseFloat(sumPositive) - parseFloat(resp.data.registers[i].value);
+            } else {
+                sumNegative = parseFloat(sumNegative) - parseFloat(resp.data.registers[i].value);
+            }
         }
-        console.log(total)
+        setTotal(sumNegative - sumPositive);
+        console.log(total > 0);
     }
 
     function prepareRegister(type) {
@@ -53,12 +59,12 @@ export default function Home() {
                                     <span>{register.date}</span>
                                     <span>{register.description}</span>
                                 </div>
-                                <Register color={register.type === "entrada" ? incomeColor : outcomeColor}>{parseFloat(register.value).toFixed(2)}</Register>
+                                <Register color={register.type === "entrada" ? incomeColor : outcomeColor}>{parseFloat(register.value).toFixed(2).replace(".", ",")}</Register>
                             </div>
                         )}
                         <div>
                             <h6>SALDO</h6>
-                            <Register color={total > 0 ? outcomeColor : incomeColor}>{total}</Register>
+                            <Register color={total > 0 ? incomeColor : outcomeColor}>{total.toFixed(2).toString().replace("-", "").replace(".", ",")}</Register>
                         </div>
                     </Registers>
                     :
@@ -113,7 +119,8 @@ main {
     border-radius: 5px;
     color: #868686;
     width: 330px;
-    padding: 0px 12px 10px 12px;
+    padding: 0px 12px 40px 12px;
+    position: relative;
 }
 
 footer {
@@ -145,6 +152,7 @@ const Registers = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 
 >div {
     margin-top: 23px;
@@ -163,13 +171,18 @@ span:nth-child(2) {
 }
 
 h6 {
-    font-size: 18px;
     font-weight: 700;
     color: black;
 }
 
 >div:last-child {
-    justify-self: flex-end;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 25px;
+    font-size: 18px;
+    padding: 20px;
 }
 `
 
