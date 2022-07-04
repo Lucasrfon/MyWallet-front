@@ -18,7 +18,7 @@ export default function Home() {
     const outcomeColor = "#C70000";
 
     useEffect(() => {
-        axios.get('http://localhost:5000/register', token).then(getValues).catch(e => console.log(e));
+        axios.get('https://mywallet-back-project.herokuapp.com/register', token).then(getValues).catch(e => console.log(e));
     }, []);
 
     function getValues(resp) {
@@ -42,7 +42,7 @@ export default function Home() {
 
     function removeRegister(id) {
         if ( window.confirm('Tem certeza que quer apagar este registro?') === true) {
-            axios.delete('http://localhost:5000/register', {_id: id}, token).then(e => console.log("oi")).catch(e => console.log(e));
+            axios.delete('https://mywallet-back-project.herokuapp.com/register', {_id: id}, token).then(e => console.log("oi")).catch(e => console.log(e));
         }
     }
 

@@ -18,7 +18,7 @@ export default function SignUp() {
     }
 
     function sendRequest() {
-        axios.post('http://localhost:5000/sign-up', register).then(() => navigate("/")).catch((error) => alert(error.response.data));
+        axios.post('https://mywallet-back-project.herokuapp.com/sign-up', register).then(() => navigate("/")).catch((error) => alert(error.response.data));
     }
 
     return (

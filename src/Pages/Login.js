@@ -11,7 +11,7 @@ export default function Login() {
 
     function sendLogin(event) {
         event.preventDefault();
-        axios.post('http://localhost:5000/login', user).then(login).catch((error) => alert(error.response.data));
+        axios.post('https://mywallet-back-project.herokuapp.com/login', user).then(login).catch((error) => alert(error.response.data));
     }
 
     function login(resp) {

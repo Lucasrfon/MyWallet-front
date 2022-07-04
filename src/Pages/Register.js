@@ -13,7 +13,7 @@ export default function Register() {
 
     function sendRegister(event) {
         event.preventDefault();
-        axios.post('http://localhost:5000/register', register, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
+        axios.post('https://mywallet-back-project.herokuapp.com/register', register, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
     }
 
     return (
