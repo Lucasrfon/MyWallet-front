@@ -33,13 +33,20 @@ export default function Home() {
             }
         }
         setTotal(sumNegative - sumPositive);
-        console.log(total > 0);
     }
 
     function prepareRegister(type) {
         setType(type);
         navigate('/Register');
     }
+
+    function removeRegister(id) {
+        if ( window.confirm('Tem certeza que quer apagar este registro?') === true) {
+            axios.delete('http://localhost:5000/register', {_id: id}, token).then(e => console.log("oi")).catch(e => console.log(e));
+        }
+    }
+
+    
     
     return (
         <Container>
@@ -50,16 +57,18 @@ export default function Home() {
                 </Link>
             </header>
             <main>
-                {
-                    registers.length > 0 ?
+                {registers.length > 0 ?
                     <Registers>
                         {registers.map(register =>
                             <div key={register._id}>
                                 <div>
-                                    <span>{register.date}</span>
-                                    <span>{register.description}</span>
+                                    <GreySpan>{register.date}</GreySpan>
+                                    <BlackSpan>{register.description}</BlackSpan>
                                 </div>
-                                <Register color={register.type === "entrada" ? incomeColor : outcomeColor}>{parseFloat(register.value).toFixed(2).replace(".", ",")}</Register>
+                                <div>
+                                    <Register color={register.type === "entrada" ? incomeColor : outcomeColor}>{parseFloat(register.value).toFixed(2).replace(".", ",")}</Register>
+                                    <GreySpan onClick={() => removeRegister(register._id)}>x</GreySpan>
+                                </div>
                             </div>
                         )}
                         <div>
@@ -119,7 +128,7 @@ main {
     border-radius: 5px;
     color: #868686;
     width: 330px;
-    padding: 0px 12px 40px 12px;
+    padding: 0px 0px 40px 12px;
     position: relative;
 }
 
@@ -161,13 +170,8 @@ const Registers = styled.div`
     justify-content: space-between;
 }
 
-span:first-child {
-    color: #C6C6C6;
-    margin-right: 15px;
-}
-
 span:nth-child(2) {
-    color: black;
+    margin-left: 10px;
 }
 
 h6 {
@@ -186,6 +190,18 @@ h6 {
 }
 `
 
-const Register = styled.div`
+const GreySpan = styled.span`
+    color: #C6C6C6;
+
+    :last-child {
+        margin-right: 10px;
+    }
+`
+
+const BlackSpan = styled.span`
+    color: black;
+`
+
+const Register = styled.span`
     color: ${props => props.color};
 `
