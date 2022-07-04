@@ -89,5 +89,9 @@ button {
     color: white;
     font-size: 20px;
     font-weight: 700;
+
+    :hover {
+        cursor: pointer;
+    }
 }
 `

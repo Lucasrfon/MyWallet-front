@@ -45,6 +45,7 @@ export default function Home() {
 
     function removeRegister(id) {
         if ( window.confirm('Tem certeza que quer apagar este registro?') === true) {
+            console.log(id)
             axios.delete('https://mywallet-back-project.herokuapp.com/register', {_id: id}, token).then(() => console.log("ok")).catch(e => console.log(e));
         }
     }
@@ -159,6 +160,10 @@ footer {
         p {
             font-size: 20px;
         }
+
+        :hover {
+            cursor: pointer;
+        }
     }
 }
 `
@@ -202,11 +207,19 @@ const GreySpan = styled.span`
 
     :last-child {
         margin-right: 10px;
+
+        :hover {
+            cursor: pointer;
+        }
     }
 `
 
 const BlackSpan = styled.span`
     color: black;
+
+:hover {
+    cursor: pointer;
+}
 `
 
 const Register = styled.span`
