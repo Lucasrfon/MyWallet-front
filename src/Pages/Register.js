@@ -1,28 +1,45 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TokenContext from "../Contexts/TokenContext";
 import TypeContext from "../Contexts/TypeContext";
+import RegisterContext from "../Contexts/RegisterContext";
 
 export default function Register() {
     const navigate = useNavigate();
     const {token} = useContext(TokenContext);
     const {type} = useContext(TypeContext);
-    const [register, setRegister] = useState({value: "", description: "", type: type});
+    const {register} = useContext(RegisterContext);
+    const [newRegister, setNewRegister] = useState({value: "", description: "", type: type});
 
-    function sendRegister(event) {
+    function sendNewRegister(event) {
         event.preventDefault();
-        axios.post('https://mywallet-back-project.herokuapp.com/register', register, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
+        axios.post('https://mywallet-back-project.herokuapp.com/register', newRegister, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
     }
+
+    function sendUpdate(event) {
+        event.preventDefault();
+        axios.put('https://mywallet-back-project.herokuapp.com/register', {
+            ...newRegister,
+            _id: register._id
+        }, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
+    }
+
+    useEffect(() => {
+        if(register.date) {
+            setNewRegister({value: register.value, description: register.description})
+        }    
+    }, []);
+
 
     return (
         <Container>
-            <header>Nova {type}</header>
-            <form onSubmit={sendRegister}>
-                <input required placeholder="Valor" type="number" value={register.value} onChange={e => setRegister({...register, value: e.target.value})} />
-                <input required placeholder="Descrição" type="text" value={register.description} onChange={e => setRegister({...register, description: e.target.value})} />
-                <button typeof="submit">Salvar {type}</button>
+            <header>{register.date ? "Editar" : "Nova"} {type}</header>
+            <form onSubmit={register.date ? sendUpdate : sendNewRegister}>
+                <input required placeholder="Valor" type="number" value={newRegister.value} onChange={e => setNewRegister({...newRegister, value: e.target.value})} />
+                <input required placeholder="Descrição" type="text" value={newRegister.description} onChange={e => setNewRegister({...newRegister, description: e.target.value})} />
+                <button typeof="submit">{register.date ? "Atualizar" : "Salvar"} {type}</button>
             </form>
         </Container>
     )

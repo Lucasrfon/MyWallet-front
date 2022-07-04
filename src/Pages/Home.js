@@ -4,11 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TokenContext from "../Contexts/TokenContext";
 import TypeContext from "../Contexts/TypeContext";
+import RegisterContext from "../Contexts/RegisterContext";
 
 export default function Home() {
     const navigate = useNavigate();
     const {token} = useContext(TokenContext);
     const {setType} = useContext(TypeContext);
+    const {setRegister} = useContext(RegisterContext);
     const [user, setUser] = useState("");
     const [registers, setRegisters] = useState([]);
     let sumPositive = 0;
@@ -36,17 +38,22 @@ export default function Home() {
     }
 
     function prepareRegister(type) {
+        setRegister({date: ""});
         setType(type);
         navigate('/Register');
     }
 
     function removeRegister(id) {
         if ( window.confirm('Tem certeza que quer apagar este registro?') === true) {
-            axios.delete('https://mywallet-back-project.herokuapp.com/register', {_id: id}, token).then(e => console.log("oi")).catch(e => console.log(e));
+            axios.delete('https://mywallet-back-project.herokuapp.com/register', {_id: id}, token).then(() => console.log("ok")).catch(e => console.log(e));
         }
     }
 
-    
+    function updateRegister(register) {
+        setRegister({...register});
+        setType(register.type);
+        navigate('/Register');
+    }
     
     return (
         <Container>
@@ -63,7 +70,7 @@ export default function Home() {
                             <div key={register._id}>
                                 <div>
                                     <GreySpan>{register.date}</GreySpan>
-                                    <BlackSpan>{register.description}</BlackSpan>
+                                    <BlackSpan onClick={() => updateRegister(register)}>{register.description}</BlackSpan>
                                 </div>
                                 <div>
                                     <Register color={register.type === "entrada" ? incomeColor : outcomeColor}>{parseFloat(register.value).toFixed(2).replace(".", ",")}</Register>
