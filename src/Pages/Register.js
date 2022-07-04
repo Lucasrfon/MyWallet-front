@@ -1,13 +1,28 @@
-import styled from "styled-components"
+import axios from "axios";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import TokenContext from "../Contexts/TokenContext";
+import TypeContext from "../Contexts/TypeContext";
 
 export default function Register() {
+    const navigate = useNavigate();
+    const {token} = useContext(TokenContext);
+    const {type} = useContext(TypeContext);
+    const [register, setRegister] = useState({value: "", description: "", type: type});
+
+    function sendRegister(event) {
+        event.preventDefault();
+        axios.post('http://localhost:5000/register', register, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
+    }
+
     return (
         <Container>
-            <header>Nova entrada</header>
-            <form>
-                <input placeholder="Valor" />
-                <input placeholder="Descrição" />
-                <button>Salvar entrada</button>
+            <header>Nova {type}</header>
+            <form onSubmit={sendRegister}>
+                <input required placeholder="Valor" type="number" value={register.value} onChange={e => setRegister({...register, value: e.target.value})} />
+                <input required placeholder="Descrição" type="text" value={register.description} onChange={e => setRegister({...register, description: e.target.value})} />
+                <button typeof="submit">Salvar {type}</button>
             </form>
         </Container>
     )

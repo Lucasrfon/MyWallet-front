@@ -1,10 +1,14 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TokenContext from "../Contexts/TokenContext";
+import TypeContext from "../Contexts/TypeContext";
 
 export default function Home() {
+    const navigate = useNavigate();
     const {token} = useContext(TokenContext);
+    const {setType} = useContext(TypeContext);
     const [user, setUser] = useState("");
     const [registers, setRegisters] = useState([]);
     let [total, setTotal] = useState(0);
@@ -18,14 +22,26 @@ export default function Home() {
     function getValues(resp) {
         setRegisters(resp.data.registers);
         setUser(resp.data.user);
-        resp.data.registers.forEach(register => setTotal(total += register.value));
+        console.log(resp.data.registers.length);
+        for(let i = 0; i < resp.data.registers.length; i ++) {
+            console.log(i);
+            setTotal(total + 1);
+        }
+        console.log(total)
+    }
+
+    function prepareRegister(type) {
+        setType(type);
+        navigate('/Register');
     }
     
     return (
         <Container>
             <header>
                 <h2>Olá, {user}</h2>
-                <ion-icon name="exit-outline"></ion-icon>
+                <Link to="/">
+                    <ion-icon name="exit-outline"></ion-icon>
+                </Link>
             </header>
             <main>
                 {
@@ -37,12 +53,12 @@ export default function Home() {
                                     <span>{register.date}</span>
                                     <span>{register.description}</span>
                                 </div>
-                                <Register color={register.type === "saida" ? outcomeColor : incomeColor}>{register.value.toFixed(2)}</Register>
+                                <Register color={register.type === "entrada" ? incomeColor : outcomeColor}>{parseFloat(register.value).toFixed(2)}</Register>
                             </div>
                         )}
                         <div>
                             <h6>SALDO</h6>
-                            <Register color={total > 0 ? outcomeColor : incomeColor}>{total.toFixed(2)}</Register>
+                            <Register color={total > 0 ? outcomeColor : incomeColor}>{total}</Register>
                         </div>
                     </Registers>
                     :
@@ -53,11 +69,11 @@ export default function Home() {
                 }
             </main>
             <footer>
-                <div>
+                <div onClick={() => prepareRegister("entrada")}>
                     <ion-icon name="add-circle-outline"></ion-icon>
                     <p>Nova <br/> entrada</p>
                 </div>
-                <div>
+                <div onClick={() => prepareRegister("saída")}>
                     <ion-icon name="remove-circle-outline"></ion-icon>
                     <p>Nova <br/> saída</p>
                 </div>
@@ -80,6 +96,11 @@ header {
     font-size: 30px;
     font-weight: 700;
     width: 330px;
+}
+
+ion-icon {
+    color: white;
+    font-size: 36px;
 }
 
 main {
