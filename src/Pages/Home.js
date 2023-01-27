@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TokenContext from "../Contexts/TokenContext";
 import TypeContext from "../Contexts/TypeContext";
 import RegisterContext from "../Contexts/RegisterContext";
+import api from "../Components/axiosConfig";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function Home() {
     const outcomeColor = "#C70000";
 
     useEffect(() => {
-        axios.get('https://mywallet-back-project.herokuapp.com/register', token).then(getValues).catch(e => console.log(e));
+        api.get('/register', token).then(getValues).catch(e => console.log(e));
     }, []);
 
     function getValues(resp) {
@@ -45,8 +45,8 @@ export default function Home() {
 
     function removeRegister(id) {
         if ( window.confirm('Tem certeza que quer apagar este registro?') === true) {
-            console.log(id)
-            axios.delete('https://mywallet-back-project.herokuapp.com/register', {_id: id}, token).then(() => console.log("ok")).catch(e => console.log(e));
+            console.log(token)
+            api.delete('/register', {_id: id}, token).then(() => alert("Registro excluído")).catch(e => console.log(e));
         }
     }
 

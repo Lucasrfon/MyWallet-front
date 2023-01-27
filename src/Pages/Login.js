@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import api from "../Components/axiosConfig";
 import TokenContext from "../Contexts/TokenContext";
 
 export default function Login() {
@@ -11,7 +11,7 @@ export default function Login() {
 
     function sendLogin(event) {
         event.preventDefault();
-        axios.post('https://mywallet-back-project.herokuapp.com/login', user).then(login).catch((error) => alert(error.response.data));
+        api.post(`/login`, user).then(login).catch((error) => alert(error.response.data));
     }
 
     function login(resp) {

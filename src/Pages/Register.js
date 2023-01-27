@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TokenContext from "../Contexts/TokenContext";
 import TypeContext from "../Contexts/TypeContext";
 import RegisterContext from "../Contexts/RegisterContext";
+import api from "../Components/axiosConfig";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -15,12 +15,12 @@ export default function Register() {
 
     function sendNewRegister(event) {
         event.preventDefault();
-        axios.post('https://mywallet-back-project.herokuapp.com/register', newRegister, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
+        api.post('/register', newRegister, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));
     }
 
     function sendUpdate(event) {
         event.preventDefault();
-        axios.put('https://mywallet-back-project.herokuapp.com/register', {
+        api.put('/register', {
             ...newRegister,
             _id: register._id
         }, token).then(() => navigate('/Home')).catch(() => (error) => alert(error.response.data));

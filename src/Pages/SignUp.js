@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import api from "../Components/axiosConfig";
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function SignUp() {
     }
 
     function sendRequest() {
-        axios.post('https://mywallet-back-project.herokuapp.com/sign-up', register).then(() => navigate("/")).catch((error) => alert(error.response.data));
+        api.post('/signup', register).then(() => navigate("/")).catch((error) => alert(error.response.data));
     }
 
     return (
